@@ -131,9 +131,6 @@ int main(void)
 
       /** @brief Initialize network */
       const ai_handle acts[] = { activations };
-      const ai_handle whts[] = { weithtsNew };
-
-      //err = ai_sine_model_create_and_init(&network, acts, whts);
 
       err = ai_sine_model_create_and_init(&network, acts, NULL);
       if (err.type != AI_ERROR_NONE) {
@@ -148,13 +145,11 @@ int main(void)
       }
 
 
-      ai_network_params ai_params = AI_NETWORK_PARAMS_INIT(AI_SINE_MODEL_DATA_WEIGHTS(ai_sine_model_data_weights_get()), AI_SINE_MODEL_DATA_ACTIVATIONS(activations));
-      ai_sine_model_init(network, &ai_params);
-
       if (ai_sine_model_get_report(network, &report) != true) {
     	  buf_len = sprintf(buf, "ai get report error\r\n");
     	  HAL_UART_Transmit(&huart3, (uint8_t *)buf, buf_len, 100);
       }
+      /*
       buf_len = sprintf(buf, "Model name      : ");
       HAL_UART_Transmit(&huart3, (uint8_t *)buf, buf_len, 100);
       buf_len = sprintf(buf, report.model_name);
@@ -163,13 +158,11 @@ int main(void)
       HAL_UART_Transmit(&huart3, (uint8_t *)buf, buf_len, 100);
       buf_len = sprintf(buf, report.model_signature);
       HAL_UART_Transmit(&huart3, (uint8_t *)buf, buf_len, 100);
-
+*/
       ai_input = &report.inputs[0];
       ai_output = &report.outputs[0];
 
-//      ai_input = ai_sine_model_inputs_get(network, NULL);
-//      ai_output = ai_sine_model_outputs_get(network, NULL);
-
+//link inputs and outputs to the model
       ai_input[0].data = AI_HANDLE_PTR(in_data);
       ai_output[0].data = AI_HANDLE_PTR(out_data);
 
@@ -206,13 +199,6 @@ int main(void)
 		  buf_len = sprintf(buf, "%f \r\n",y_val);
 
 		  HAL_UART_Transmit(&huart3, (uint8_t *)buf, buf_len, 100);
-
-	//	  uint8_t data[] = "HELLO WORLD \r\n";
-	//
-	//	  HAL_UART_Transmit (&huart3, data, sizeof (data), 10);
-	//
-	//
-	//
 
 		  HAL_Delay (50);
 }
